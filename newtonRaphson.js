@@ -29,11 +29,11 @@ function newtonRaphson(f, df, x0, d, maxIter = 0) {
 // Definir la función a analizar
 
 function funcionEjemplo(x) {
-  return x - Math.cos(x);
+  return 2 * Math.sin(x) - x;
 }
 
 function derivadaFuncionEjemplo(x) {
-  return 1 + Math.sin(x);
+  return 2 * Math.cos(x) - 1;
 }
 
 let { x, y, dy, err } = newtonRaphson(
