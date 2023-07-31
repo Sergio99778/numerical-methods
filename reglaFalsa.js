@@ -12,10 +12,10 @@ function reglaFalsa(f, a, b, d = 0.0001, e = 0.0001, m = 1000) {
       "No cumple las condiciones. El producto f(a)*f(b) es mayor que cero."
     );
   }
-
+  let c
   for (let k = 1; k <= m; k++) {
     let dx = (yb * (b - a)) / (yb - ya);
-    const c = b - dx;
+     c = b - dx;
     const ac = c - a;
     const yc = evaluarFuncion(f, c);
 
@@ -41,7 +41,6 @@ function reglaFalsa(f, a, b, d = 0.0001, e = 0.0001, m = 1000) {
 
   console.table(values);
 
-  const c = (a + b) / 2;
   const err = Math.abs(b - a) / 2;
   const yc = evaluarFuncion(f, c);
 
