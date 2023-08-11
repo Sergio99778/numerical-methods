@@ -1,7 +1,6 @@
 function f(x) {
   return Math.pow(x, 3) - 13 * x * x - 12;
 }
-
 function muller(p0, p1, p3) {
   let i;
   let res;
