@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+
+<div id="plot"></div>
+<div id="result"></div>
+<div id="error-truncamiento"></div>
+
+<script>
+    let xtrapezoidalValues = [];
+    let ytrapezoidalValues = [];
+function trapezoidalRule(f, a, b, n) {
+  const h = (b - a) / n;
+  let sum = 0;
+  for (let i = 1; i < n; i++) {
+    sum += f(a + i * h);
+    xtrapezoidalValues.push(a + i * h);
+    ytrapezoidalValues.push(f(a + i * h));
+  }
+  sum += (f(a) + f(b)) / 2;
+  const errorTruncamiento = (h ** 2) * sum
+  document.getElementById('error-truncamiento').innerHTML = `Error de truncamiento: ${errorTruncamiento}`;
+  return sum * h;
+}
+
+
+
+function exampleFunction(x) {
+  return x ** 3 - 6 * x ** 2 + 11 * x - 6;
+}
+
+const a = 1.3;
+const b = 1.8;
+const n = 6;
+
+const xValues = [];
+const yValues = [];
+
+xtrapezoidalValues.push(a);
+ytrapezoidalValues.push(exampleFunction(a));
+trapezoidalRule(exampleFunction, a, b, n);
+xtrapezoidalValues.push(b);
+ytrapezoidalValues.push(exampleFunction(b));
+
+for (let i = a; i <= b; i += (b - a) / 100) {
+  xValues.push(i);
+  yValues.push(exampleFunction(i));
+}
+
+const traceFunction = {
+  x: xValues,
+  y: yValues,
+  mode: 'lines',
+  name: 'Function'
+};
+
+trapezoidText = [' '];
+for (let i = 0; i < n; i++) {
+  trapezoidText.push(`Trapezoid ${i + 1}`);
+}
+
+const traceTrapezoids = {
+  x: xtrapezoidalValues,
+  y: ytrapezoidalValues,
+  mode: 'lines+text',
+  name: 'Trapezoids',
+  text: trapezoidText,
+  textposition: 'bottom'
+};
+
+const layout = {
+  title: 'Function and Trapezoids',
+  xaxis: { title: 'x' },
+  yaxis: { title: 'f(x)' }
+};
+
+const plotData = [traceFunction, traceTrapezoids];
+
+Plotly.newPlot('plot', plotData, layout);
+// Write the result of the trapezoidal rule to the page
+document.getElementById('result').innerHTML = `Resultado: ${trapezoidalRule(exampleFunction, a, b, n)}`;
+</script>
+
+</body>
+</html>
