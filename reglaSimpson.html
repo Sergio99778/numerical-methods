@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+
+<div id="plot"></div>
+<div id="result"></div>
+<div id="error-truncamiento"></div>
+
+<script>
+    let xSimpsonValues = [];
+    let ySimpsonValues = [];
+
+function simpsonRule(f, a, b, n) {
+  const h = (b - a) / n;
+  let sum = 0;
+  for (let i = 1; i < n; i++) {
+    sum += f(a + i * h);
+    xSimpsonValues.push(a + i * h);
+    ySimpsonValues.push(f(a + i * h));
+  }
+  sum += (f(a) + f(b)) / 2;
+  const errorTruncamiento = (h ** 2) * sum
+  document.getElementById('error-truncamiento').innerHTML = `Error de truncamiento: ${errorTruncamiento}`;
+  return sum * h;
+}
+
+function exampleFunction(x) {
+  return Math.exp(x ** 2);
+}
+
+const a = 0;
+const b = 1;
+const n = 8;
+
+const xValues = [];
+const yValues = [];
+
+xSimpsonValues.push(a);
+ySimpsonValues.push(exampleFunction(a));
+simpsonRule(exampleFunction, a, b, n);
+xSimpsonValues.push(b);
+ySimpsonValues.push(exampleFunction(b));
+
+for (let i = a; i <= b; i += (b - a) / 100) {
+  xValues.push(i);
+  yValues.push(exampleFunction(i));
+}
+
+
+const traceFunction = {
+  x: xValues,
+  y: yValues,
+  mode: 'lines',
+  name: 'Function'
+};
+
+simpsonText = [' '];
+for (let i = 0; i < n; i++) {
+  simpsonText.push(`Simpson ${i + 1}`);
+}
+
+
+
+const traceSimpson = {
+  x: xSimpsonValues,
+  y: ySimpsonValues,
+  mode: 'lines+text',
+  name: 'Simpson iterations',
+  text: simpsonText,
+  textposition: 'bottom'
+};
+
+const layout = {
+  title: 'Function and Simpson iterations',
+  xaxis: { title: 'x' },
+  yaxis: { title: 'f(x)' }
+};
+
+const plotData = [traceFunction, traceSimpson];
+
+Plotly.newPlot('plot', plotData, layout);
+// Write the result of the trapezoidal rule to the page
+document.getElementById('result').innerHTML = `Resultado: ${simpsonRule(exampleFunction, a, b, n)}`;
+</script>
+
+</body>
+</html>
