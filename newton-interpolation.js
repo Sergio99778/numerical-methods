@@ -38,6 +38,6 @@ function convolve(A, B) {
   return result;
 }
 // Example
-const X = [0, 1, 2, 3, 4];
-const Y = [Math.cos(0), Math.cos(1), Math.cos(2), Math.cos(3), Math.cos(4)];
+const X = [-1, 1, 2, 3];
+const Y = [2, 1, 2, -2];
 console.table(newton(X, Y));
